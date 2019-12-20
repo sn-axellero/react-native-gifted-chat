@@ -28,7 +28,7 @@ const getHTML = (svgContent: any, style: any) => `
 </html>
 `;
 
-const SvgImage = ({ uri: String }) => {
+const SvgImage = ({ uri: string }) => {
   const [data, setData] = useState()
 
   useEffect(() => {
