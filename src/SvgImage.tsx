@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
 
-const getHTML = (svgContent, style) => `
+const getHTML = (svgContent: any, style: any) => `
 <html data-key="key-${style.height}-${style.width}">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,7 +28,7 @@ const getHTML = (svgContent, style) => `
 </html>
 `;
 
-const SvgImage = ({ uri }) => {
+const SvgImage = ({ uri: String }) => {
   const [data, setData] = useState()
 
   useEffect(() => {
@@ -54,10 +54,9 @@ const SvgImage = ({ uri }) => {
   return (
     <View pointerEvents="none" style={styles.container}>
       <WebView
-        source={{ html: getHTML(data, styles.svg) }}
+        source={{ html?: getHTML(data, styles.svg) }}
         originWhitelist={['*']}
         scalesPageToFit={true}
-        useWebKit={false}
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
