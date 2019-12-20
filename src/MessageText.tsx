@@ -87,6 +87,7 @@ export interface MessageTextProps<TMessage extends IMessage> {
   textProps?: TextProps
   customTextStyle?: StyleProp<TextStyle>
   parsePatterns?(linkStyle: TextStyle): any
+  onLinkPress?(meta: any, url: String): any
 }
 
 export default class MessageText<
