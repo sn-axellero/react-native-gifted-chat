@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet } from 'react-native'
+// @ts-ignore
 import { WebView } from 'react-native-webview'
 
 const getHTML = (svgContent: any, style: any) => `
@@ -28,8 +29,9 @@ const getHTML = (svgContent: any, style: any) => `
 </html>
 `;
 
-const SvgImage = ({ uri: string }) => {
+const SvgImage = (props: { uri: string }) => {
   const [data, setData] = useState()
+  const { uri } = props
 
   useEffect(() => {
     if (uri) {
@@ -54,7 +56,7 @@ const SvgImage = ({ uri: string }) => {
   return (
     <View pointerEvents="none" style={styles.container}>
       <WebView
-        source={{ html?: getHTML(data, styles.svg) }}
+        source={{ html: getHTML(data, styles.svg) }}
         originWhitelist={['*']}
         scalesPageToFit={true}
         scrollEnabled={false}
