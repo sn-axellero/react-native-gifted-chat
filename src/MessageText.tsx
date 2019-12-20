@@ -87,7 +87,7 @@ export interface MessageTextProps<TMessage extends IMessage> {
   textProps?: TextProps
   customTextStyle?: StyleProp<TextStyle>
   parsePatterns?(linkStyle: TextStyle): any
-  onLinkPress(meta: any, url: string): any
+  onLinkPress?(meta: any, url: string): any
 }
 
 export default class MessageText<
@@ -208,7 +208,7 @@ export default class MessageText<
             p: styles[this.props.position].text2
           }}
           style={styles.left.htmlContainer}
-          onLinkPress={(url: any) => this.props.onLinkPress(meta, url)}
+          onLinkPress={(url: any) => this.props.onLinkPress ? this.props.onLinkPress(meta, url) : null}
         />
       )
     }
