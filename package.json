@@ -111,7 +111,8 @@
   "peerDependencies": {
     "moment": "*",
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-htmlview": "*"
   },
   "husky": {
     "hooks": {
