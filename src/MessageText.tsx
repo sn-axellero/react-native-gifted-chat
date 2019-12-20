@@ -13,7 +13,10 @@ import {
 
 // @ts-ignore
 import ParsedText from 'react-native-parsed-text'
+// @ts-ignore
+import HTMLView from 'react-native-htmlview'
 import Communications from 'react-native-communications'
+import SvgImage from './SvgImage';
 import { LeftRightStyle, IMessage } from './types'
 
 const WWW_URL_PATTERN = /^www\./i
@@ -26,6 +29,15 @@ const textStyle = {
   marginLeft: 10,
   marginRight: 10,
 }
+const textStyle2 = {
+  fontSize: 16,
+  lineHeight: 20,
+  marginTop: 0,
+  marginBottom: 0,
+  marginVertical: 0,
+  marginLeft: 10,
+  marginRight: 10,
+};
 
 const styles = {
   left: StyleSheet.create({
@@ -34,9 +46,16 @@ const styles = {
       color: 'black',
       ...textStyle,
     },
+    text2: {
+      color: 'black',
+      ...textStyle2,
+    },
     link: {
       color: 'black',
       textDecorationLine: 'underline',
+    },
+    htmlContainer: {
+      marginTop: 5
     },
   }),
   right: StyleSheet.create({
@@ -44,6 +63,10 @@ const styles = {
     text: {
       color: 'white',
       ...textStyle,
+    },
+    text2: {
+      color: 'white',
+      ...textStyle2,
     },
     link: {
       color: 'white',
@@ -167,6 +190,59 @@ export default class MessageText<
       styles[this.props.position].link,
       this.props.linkStyle && this.props.linkStyle[this.props.position],
     ]
+    let txt = this.props.currentMessage!.text
+    let meta = this.props.currentMessage!.meta
+    let content
+    const check = meta && (meta.personality_test_request || meta.activity)
+    if (!check && txt.substring(0, 3) === '<p>') {
+      txt = txt.slice(3, -4)
+    }
+    if (check) {
+      content = (
+        <HTMLView
+          value={txt}
+          addLineBreaks={false}
+          stylesheet={{
+            a: linkStyle,
+            p: styles[this.props.position].text2
+          }}
+          style={styles.left.htmlContainer}
+          onLinkPress={(url) => this.props.onLinkPress(meta, url)}
+        />
+      )
+    }
+    else if (meta && meta.icebreaker) {
+      content = (
+        <SvgImage uri={meta.icebreaker_graphic} />
+      )
+    }
+    else if (txt.charAt(0) === '<') {
+        content = (
+            <HTMLView value={txt} stylesheet={{
+                a: linkStyle
+            }}/>
+        )
+    }
+    else {
+        content = (
+            <ParsedText
+                style={[
+                    styles[this.props.position].text,
+                    this.props.textStyle && this.props.textStyle[this.props.position],
+                    this.props.customTextStyle,
+                ]}
+                parse={[
+                    ...this.props.parsePatterns(linkStyle),
+                    { type: 'url', style: linkStyle, onPress: this.onUrlPress },
+                    { type: 'phone', style: linkStyle, onPress: this.onPhonePress },
+                    { type: 'email', style: linkStyle, onPress: this.onEmailPress },
+                ]}
+                childrenProps={{ ...this.props.textProps }}
+            >
+                {txt}
+            </ParsedText>
+        )
+    }
     return (
       <View
         style={[
@@ -175,22 +251,7 @@ export default class MessageText<
             this.props.containerStyle[this.props.position],
         ]}
       >
-        <ParsedText
-          style={[
-            styles[this.props.position].text,
-            this.props.textStyle && this.props.textStyle[this.props.position],
-            this.props.customTextStyle,
-          ]}
-          parse={[
-            ...this.props.parsePatterns!(linkStyle as TextStyle),
-            { type: 'url', style: linkStyle, onPress: this.onUrlPress },
-            { type: 'phone', style: linkStyle, onPress: this.onPhonePress },
-            { type: 'email', style: linkStyle, onPress: this.onEmailPress },
-          ]}
-          childrenProps={{ ...this.props.textProps }}
-        >
-          {this.props.currentMessage!.text}
-        </ParsedText>
+        {content}
       </View>
     )
   }
