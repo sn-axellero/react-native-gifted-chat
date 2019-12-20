@@ -191,7 +191,7 @@ export default class MessageText<
       this.props.linkStyle && this.props.linkStyle[this.props.position],
     ]
     let txt = this.props.currentMessage!.text
-    let meta = this.props.currentMessage!.meta
+    const meta = this.props.currentMessage!.meta
     let content
     const check = meta && (meta.personality_test_request || meta.activity)
     if (!check && txt.substring(0, 3) === '<p>') {
