@@ -208,7 +208,7 @@ export default class MessageText<
             p: styles[this.props.position].text2
           }}
           style={styles.left.htmlContainer}
-          onLinkPress={(url) => this.props.onLinkPress(meta, url)}
+          onLinkPress={(url: any) => this.props.onLinkPress(meta, url)}
         />
       )
     }
